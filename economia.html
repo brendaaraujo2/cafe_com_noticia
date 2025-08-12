@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Café com Notícia - Jornal Brasileiro</title>
+  <link rel="icon" type="image/png" href="assets/reporter.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/7948043/pexels-photo-7948043.jpeg') no-repeat center center fixed;
+      background-size: 100% auto;
+      color: #222;
+      line-height: 1.5;
+      min-height: 150vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 0;
+    }
+    a { text-decoration: none; color: #c00; transition: color 0.3s ease; outline-offset: 3px; }
+    a:hover, a:focus-visible {
+      color: #900;
+      outline: 2px solid #900;
+      outline-offset: 3px;
+    }
+    header {
+      background: #cc0000;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 50px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60px;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: white;
+      user-select: none;
+    }
+    .logo-text {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(
+        90deg,
+        red,
+        orange,
+        yellow,
+        green,
+        blue,
+        indigo,
+        violet
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+    }
+    /* Menu padrão desktop */
+    nav {
+      flex-grow: 1;
+    }
+    .menu {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 35px;
+      padding: 0;
+      margin: 0;
+    }
+    .menu li a {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      transition: background-color 0.25s ease;
+      display: inline-block;
+    }
+    .menu li a:hover,
+    .menu li a.active,
+    .menu li a:focus-visible {
+      background-color: #990000;
+      text-decoration: none;
+      outline: 2px solid #900;
+      outline-offset: 3px;
+    }
+    /* Botão hamburguer para mobile */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      width: 30px;
+      height: 24px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1100;
+    }
+    .hamburger span {
+      height: 3px;
+      background: white;
+      margin-bottom: 5px;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    /* Menu mobile escondido */
+    nav.mobile-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: #cc0000;
+      width: 100%;
+      max-width: 250px;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.3);
+      flex-direction: column;
+      padding: 10px 0;
+      z-index: 1000;
+    }
+    nav.mobile-menu.open {
+      display: flex;
+    }
+    nav.mobile-menu .menu {
+      flex-direction: column;
+      gap: 10px;
+      padding: 0 20px;
+    }
+    nav.mobile-menu .menu li a {
+      font-size: 1.1rem;
+      padding: 10px;
+      display: block;
+    }
+    main {
+      flex: 1;
+      max-width: 1100px;
+      margin: 40px auto 60px;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 30px;
+    }
+    .main-article {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-article img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+    }
+    .main-article-content {
+      padding: 30px 25px;
+    }
+    .main-article-content h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #c00;
+    }
+    .main-article-content p {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: #444;
+    }
+    .main-article-content a {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #c00;
+      border-bottom: 2px solid transparent;
+    }
+    .main-article-content a:hover, .main-article-content a:focus-visible {
+      border-color: #c00;
+      outline: none;
+      text-decoration: underline;
+    }
+    aside.sidebar {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+      padding: 25px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    aside.sidebar h2 {
+      color: #c00;
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 1.4rem;
+    }
+    aside.sidebar ul {
+      list-style: none;
+    }
+    aside.sidebar li {
+      margin-bottom: 12px;
+    }
+    aside.sidebar li a {
+      font-weight: 600;
+      color: #222;
+    }
+    aside.sidebar li a:hover, aside.sidebar li a:focus-visible {
+      color: #c00;
+      outline: none;
+      text-decoration: underline;
+    }
+    section.news-blocks {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 30px;
+      margin-top: 50px;
+      padding: 0 40px;
+    }
+    section.news-blocks article {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    section.news-blocks img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    section.news-blocks .content {
+      padding: 15px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    section.news-blocks h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #c00;
+    }
+    section.news-blocks p {
+      flex: 1;
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    section.news-blocks a {
+      font-weight: 600;
+      color: #c00;
+      align-self: flex-start;
+      border-bottom: 1px solid transparent;
+    }
+    section.news-blocks a:hover, section.news-blocks a:focus-visible {
+      border-color: #c00;
+      outline: none;
+      text-decoration: underline;
+    }
+    section.finance {
+      margin: 60px auto 80px;
+      max-width: 1100px;
+      padding: 0 40px;
+    }
+    section.finance h2 {
+      font-weight: 700;
+      color: #c00;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+    .charts {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .chart-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+      padding: 15px;
+      width: 450px;
+      max-width: 90vw;
+      height: 320px;
+    }
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+      }
+      aside.sidebar {
+        order: 1;
+        margin-top: 30px;
+        padding: 20px;
+      }
+      section.news-blocks {
+        padding: 0 20px;
+      }
+      section.finance {
+        padding: 0 20px;
+        max-width: 100%;
+      }
+      .chart-container {
+        width: 100%;
+        height: 280px;
+      }
+    }
+    @media (max-width: 600px) {
+      header {
+        justify-content: space-between;
+      }
+      /* Mostrar hamburger, esconder menu desktop */
+      .hamburger {
+        display: flex;
+      }
+      nav.desktop-menu {
+        display: none;
+      }
+      nav.mobile-menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: #cc0000;
+        width: 100%;
+        max-width: 250px;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 8px rgb(0 0 0 / 0.3);
+        flex-direction: column;
+        padding: 10px 0;
+        z-index: 1000;
+      }
+      nav.mobile-menu.open {
+        display: flex;
+      }
+      nav.mobile-menu .menu {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 20px;
+      }
+      nav.mobile-menu .menu li a {
+        font-size: 1.1rem;
+        padding: 10px;
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" aria-label="Logo NewsBr">
+      <span class="logo-text">Café com Notícia</span>
+    </div>
+    <!-- Botão hamburguer para mobile -->
+    <button class="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Menu desktop -->
+    <nav class="desktop-menu" role="navigation" aria-label="Menu principal">
+      <ul class="menu" role="menubar">
+        <li role="none"><a href="index.html" role="menuitem" tabindex="-1">Início</a></li>
+        <li role="none"><a href="brasil.html" role="menuitem" tabindex="-1">Brasil</a></li>
+        <li role="none"><a href="mundo.html" role="menuitem" tabindex="-1">Mundo</a></li>
+        <li role="none"><a href="economia.html" class="active" role="menuitem" tabindex="0" style="color: white;">Economia</a></li>
+        <li role="none"><a href="tecnologia.html" role="menuitem" tabindex="-1">Tecnologia</a></li>
+        <li role="none"><a href="esportes.html" role="menuitem" tabindex="-1">Esportes</a></li>
+      </ul>
+    </nav>
+    <!-- Menu mobile -->
+    <nav class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menu principal móvel">
+      <ul class="menu" role="menubar">
+        <li role="none"><a href="index.html" role="menuitem" tabindex="-1">Início</a></li>
+        <li role="none"><a href="brasil.html" role="menuitem" tabindex="-1">Brasil</a></li>
+        <li role="none"><a href="mundo.html" role="menuitem" tabindex="-1">Mundo</a></li>
+        <li role="none"><a href="economia.html" class="active" role="menuitem" tabindex="0">Economia</a></li>
+        <li role="none"><a href="tecnologia.html" role="menuitem" tabindex="-1">Tecnologia</a></li>
+        <li role="none"><a href="esportes.html" role="menuitem" tabindex="-1">Esportes</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <article class="main-article" tabindex="0" aria-label="Notícia principal">
+      <img id="mainImage" src="https://via.placeholder.com/800x350?text=Carregando+imagem..." alt="Imagem principal da notícia" />
+      <div class="main-article-content">
+        <h1 id="mainTitle">Carregando notícia principal...</h1>
+        <p id="mainDescription"></p>
+        <a id="mainLink" href="#" aria-label="Leia mais sobre a notícia principal" target="_blank" rel="noopener noreferrer">Leia mais</a>
+      </div>
+    </article>
+
+    <aside class="sidebar" aria-label="Últimas notícias">
+      <h2>Últimas Notícias</h2>
+      <ul id="latestNewsList"></ul>
+    </aside>
+  </main>
+
+  <section class="news-blocks" aria-label="Mais notícias" id="moreNews"></section>
+
+  <section class="finance" aria-label="Gráficos financeiros">
+    <h2>Cotação do Dólar e Ibovespa</h2>
+    <div class="charts">
+      <div id="tv_usdbrl" class="chart-container" aria-label="Gráfico da cotação do dólar"></div>
+      <div id="tv_ibov" class="chart-container" aria-label="Gráfico do índice Ibovespa"></div>
+    </div>
+  </section>
+
+  <footer>
+        &copy; 2025 Café com Notícia - Desenvolvido por Brenda Campos
+  </footer>
+
+  <!-- TradingView Widgets -->
+  <script src="https://s3.tradingview.com/tv.js"></script>
+
+  <script>
+    // TradingView Widgets Init
+    new TradingView.widget({
+      width: "100%",
+      height: 320,
+      symbol: "FX_IDC:USDBRL",
+      interval: "D",
+      timezone: "America/Sao_Paulo",
+      theme: "light",
+      style: "1",
+      locale: "pt",
+      toolbar_bg: "#f1f3f6",
+      enable_publishing: false,
+      allow_symbol_change: true,
+      container_id: "tv_usdbrl",
+    });
+    new TradingView.widget({
+      width: "100%",
+      height: 320,
+      symbol: "BVMF:IBOV",
+      interval: "D",
+      timezone: "America/Sao_Paulo",
+      theme: "light",
+      style: "1",
+      locale: "pt",
+      toolbar_bg: "#f1f3f6",
+      enable_publishing: false,
+      allow_symbol_change: true,
+      container_id: "tv_ibov",
+    });
+
+    // Melhorar a extração da imagem da descrição para capturar URLs HTTP/HTTPS mesmo em tags simples
+    function extractImageFromDescription(description) {
+      const div = document.createElement("div");
+      div.innerHTML = description;
+
+      // Procura imagem em tag <img>
+      const imgTag = div.querySelector("img");
+      if (imgTag && imgTag.src) return imgTag.src;
+
+      // Busca URL de imagem em texto (exemplo: <a href="...jpg"> ou url direta)
+      const regexImgUrl = /(https?:\/\/[^'" >]+?\.(jpg|jpeg|png|gif|webp))/i;
+      const match = description.match(regexImgUrl);
+      if (match) return match[1];
+
+      // Sem imagem encontrada
+      return "https://via.placeholder.com/400x180?text=Sem+imagem";
+    }
+
+    // URLs RSS múltiplos focados em Economia
+    const rssFeeds = [
+      "https://g1.globo.com/economia/rss.xml",
+      "https://rss.noticias.uol.com.br/economia.xml",
+      "https://www.infomoney.com.br/feed/",
+      "https://www.bbc.com/portuguese/geral/rss.xml",
+      "https://www.cnnbrasil.com.br/economia/feed/",
+      "https://economia.estadao.com.br/rss.xml"
+    ];
+
+    // Função para buscar RSS via API de proxy JSON (exemplo: rss2json.com) - grátis e sem CORS
+    // Você pode substituir a API por outra que preferir
+    async function fetchRSS(url) {
+      try {
+        // rss2json permite 10 requisições/hora grátis, ideal para teste
+        const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+        const res = await fetch(api);
+        if (!res.ok) throw new Error("Erro ao carregar RSS");
+        const data = await res.json();
+        return data;
+      } catch (error) {
+        console.error("Erro no fetchRSS:", error);
+        return null;
+      }
+    }
+
+    // Função para mostrar a notícia principal (mais recente)
+    function showMainArticle(article) {
+      const img = document.getElementById("mainImage");
+      const title = document.getElementById("mainTitle");
+      const desc = document.getElementById("mainDescription");
+      const link = document.getElementById("mainLink");
+
+      img.src = extractImageFromDescription(article.description || "");
+      img.alt = article.title || "Imagem da notícia principal";
+      title.textContent = article.title || "Sem título";
+      desc.textContent = article.description ? article.description.replace(/<[^>]*>/g, '').slice(0, 300) + "..." : "";
+      link.href = article.link || "#";
+      link.setAttribute("aria-label", "Leia mais sobre " + (article.title || "a notícia principal"));
+    }
+
+    // Função para adicionar notícias na lista lateral
+    function addLatestNews(newsArray) {
+      const list = document.getElementById("latestNewsList");
+      list.innerHTML = "";
+      newsArray.forEach((item) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = item.link;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = item.title;
+        a.setAttribute("aria-label", "Leia mais sobre " + item.title);
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    }
+
+    // Função para mostrar blocos de notícias em grid
+    function showMoreNews(newsArray) {
+      const container = document.getElementById("moreNews");
+      container.innerHTML = "";
+      newsArray.forEach((item) => {
+        const art = document.createElement("article");
+        const img = document.createElement("img");
+        const divContent = document.createElement("div");
+        divContent.className = "content";
+        const h3 = document.createElement("h3");
+        const p = document.createElement("p");
+        const a = document.createElement("a");
+
+        img.src = extractImageFromDescription(item.description || "");
+        img.alt = item.title || "Imagem da notícia";
+        h3.textContent = item.title || "Sem título";
+        p.textContent = item.description ? item.description.replace(/<[^>]*>/g, '').slice(0, 120) + "..." : "";
+        a.textContent = "Leia mais";
+        a.href = item.link;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.setAttribute("aria-label", "Leia mais sobre " + (item.title || "a notícia"));
+
+        divContent.appendChild(h3);
+        divContent.appendChild(p);
+        divContent.appendChild(a);
+
+        art.appendChild(img);
+        art.appendChild(divContent);
+
+        container.appendChild(art);
+      });
+    }
+
+    // Carregar todas as notícias de múltiplos RSS, unir e ordenar por data
+    async function loadEconomyNews() {
+      const allArticles = [];
+      for (const feedUrl of rssFeeds) {
+        const data = await fetchRSS(feedUrl);
+        if (data && data.status === "ok") {
+          // Filtrar somente artigos que contenham o tema economia (ex: título ou descrição)
+          const filtered = data.items.filter(
+            item =>
+              item.title.toLowerCase().includes("economia") ||
+              item.description.toLowerCase().includes("economia") ||
+              true // Pode ajustar filtro se desejar
+          );
+          allArticles.push(...filtered);
+        }
+      }
+      // Ordenar por data (mais recentes primeiro)
+      allArticles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+      if (allArticles.length === 0) {
+        document.getElementById("mainTitle").textContent = "Nenhuma notícia encontrada.";
+        return;
+      }
+
+      // Mostrar principal
+      showMainArticle(allArticles[0]);
+      // Mostrar últimas na sidebar (máx 6)
+      addLatestNews(allArticles.slice(1, 7));
+      // Mostrar blocos de notícias (máx 9)
+      showMoreNews(allArticles.slice(7, 16));
+    }
+
+    // Toggle menu mobile
+    const hamburger = document.querySelector(".hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    hamburger.addEventListener("click", () => {
+      const expanded = hamburger.getAttribute("aria-expanded") === "true";
+      hamburger.setAttribute("aria-expanded", String(!expanded));
+      mobileMenu.classList.toggle("open");
+    });
+
+    // Carregar notícias ao abrir a página
+    window.addEventListener("DOMContentLoaded", () => {
+      loadEconomyNews();
+    });
+  </script>
+</body>
+</html>

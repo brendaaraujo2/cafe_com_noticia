@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <title>Café com Notícia - Jornal Brasileiro</title>
+  <link rel="icon" type="image/png" href="assets/reporter.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/269948/pexels-photo-269948.jpeg') no-repeat center center fixed;
+      background-size: 120% auto;
+      color: #222;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 0;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+    }
+    a { text-decoration: none; color: #c00; transition: color 0.3s ease; outline-offset: 3px; }
+    a:hover, a:focus-visible {
+      color: #900;
+      outline: 2px solid #900;
+      outline-offset: 3px;
+    }
+    header {
+      background: #cc0000;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 50px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60px;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: white;
+      user-select: none;
+    }
+    .logo-text {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(
+        90deg,
+        red,
+        orange,
+        yellow,
+        green,
+        blue,
+        indigo,
+        violet
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+    }
+    nav {
+      flex-grow: 1;
+    }
+    .menu {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 35px;
+      padding: 0;
+      margin: 0;
+    }
+    .menu li a {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      transition: background-color 0.25s ease;
+      display: inline-block;
+    }
+    .menu li a:hover,
+    .menu li a.active,
+    .menu li a:focus-visible {
+      background-color: #990000;
+      text-decoration: none;
+      outline: 2px solid #900;
+      outline-offset: 3px;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      width: 30px;
+      height: 24px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1100;
+    }
+    .hamburger span {
+      height: 3px;
+      background: white;
+      margin-bottom: 5px;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    nav.mobile-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: #cc0000;
+      width: 100%;
+      max-width: 250px;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.3);
+      flex-direction: column;
+      padding: 10px 0;
+      z-index: 1000;
+    }
+    nav.mobile-menu.open {
+      display: flex;
+    }
+    nav.mobile-menu .menu {
+      flex-direction: column;
+      gap: 10px;
+      padding: 0 20px;
+    }
+    nav.mobile-menu .menu li a {
+      font-size: 1.1rem;
+      padding: 10px;
+      display: block;
+    }
+    /* Search bar */
+    .search-container {
+      margin: 20px auto;
+      width: 80%;
+      max-width: 800px;
+      display: flex;
+      justify-content: center;
+    }
+    .search-container input[type="search"] {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border-radius: 25px;
+      border: 2px solid #cc0000;
+      outline-offset: 3px;
+      transition: border-color 0.3s ease;
+    }
+    .search-container input[type="search"]:focus {
+      border-color: #900;
+    }
+
+    /* Conteúdo principal */
+    .top-content {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 80%;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+    section.video {
+      flex: 2 1 600px;
+      max-width: 700px;
+    }
+    section.video h2 {
+      color: #c00;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .video div {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+    }
+    .video iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0; top: 0;
+      border: 0;
+    }
+
+    .bottom-content {
+      display: flex;
+      gap: 30px;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      justify-content: center;
+      width: 80%;
+      max-width: 800px;
+      margin: 30px auto;
+    }
+    article.main-article,
+    aside.sidebar {
+      flex: 1 1 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+      padding: 25px 30px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-width: none;
+      margin: 0;
+    }
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    article.main-article img {
+      width: 100%;
+      height: 250px;
+      object-position: center;
+      object-fit: contain;
+      margin: 30px 0;
+    }
+    article.main-article h1 {
+      font-size: 2rem;
+      color: #c00;
+      margin-bottom: 30px;
+    }
+    article.main-article p {
+      font-size: 1.1rem;
+      color: #444;
+      margin-bottom: 30px;
+    }
+    article.main-article a {
+      font-weight: 700;
+      color: #c00;
+      border-bottom: 2px solid transparent;
+      text-decoration: none;
+    }
+    article.main-article a:hover,
+    article.main-article a:focus-visible {
+      border-color: #c00;
+      outline: none;
+      text-decoration: underline;
+    }
+    aside.sidebar h2 {
+      color: #c00;
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+    }
+    aside.sidebar ul {
+      list-style: none;
+    }
+    aside.sidebar li {
+      margin-bottom: 12px;
+    }
+    aside.sidebar li a {
+      font-weight: 600;
+      color: #222;
+      text-decoration: none;
+    }
+    aside.sidebar li a:hover,
+    aside.sidebar li a:focus-visible {
+      color: #c00;
+      outline: none;
+      text-decoration: underline;
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .top-content, .bottom-content {
+        flex-direction: column;
+        width: 90%;
+        max-width: none;
+      }
+      article.main-article, aside.sidebar {
+        width: 100%;
+        margin-bottom: 30px;
+        height: auto;
+      }
+      .search-container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <header>
+    <div class="logo" aria-label="Logo NewsBr">
+      <span class="logo-text">Café com Notícia</span>
+    </div>
+
+    <!-- Botão hamburguer para mobile -->
+    <button class="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Menu desktop -->
+    <nav class="desktop-menu" role="navigation" aria-label="Menu principal">
+      <ul class="menu" role="menubar">
+        <li role="none"><a href="index.html" role="menuitem" tabindex="0" style="color: white;">Início</a></li>
+        <li role="none"><a href="brasil.html" class="active" role="menuitem" tabindex="-1" style="color: blue;">Brasil</a></li>
+        <li role="none"><a href="mundo.html" role="menuitem" tabindex="-1" style="color: purple;">Mundo</a></li>
+        <li role="none"><a href="economia.html" role="menuitem" tabindex="-1" style="color: orange;">Economia</a></li>
+        <li role="none"><a href="tecnologia.html" role="menuitem" tabindex="-1" style="color: gray;">Tecnologia</a></li>
+        <li role="none"><a href="esportes.html" role="menuitem" tabindex="-1" style="color: green;">Esportes</a></li>
+      </ul>
+    </nav>
+
+    <!-- Menu mobile -->
+    <nav class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menu principal móvel">
+      <ul class="menu" role="menubar">
+        <li role="none"><a href="index.html" role="menuitem" tabindex="0">Início</a></li>
+        <li role="none"><a href="brasil.html" class="active" role="menuitem" tabindex="-1">Brasil</a></li>
+        <li role="none"><a href="mundo.html" role="menuitem" tabindex="-1">Mundo</a></li>
+        <li role="none"><a href="economia.html" role="menuitem" tabindex="-1">Economia</a></li>
+        <li role="none"><a href="tecnologia.html" role="menuitem" tabindex="-1">Tecnologia</a></li>
+        <li role="none"><a href="esportes.html" role="menuitem" tabindex="-1">Esportes</a></li>
+      </ul>
+    </nav>
+  </header>
+    </header>
+
+  <div class="search-container" role="search">
+  <form action="https://www.google.com/search" method="GET" target="_blank" novalidate>
+    <input 
+      type="search" 
+      name="q" 
+      placeholder="Pesquisar notícias esportivas..." 
+      aria-label="Pesquisar notícias esportivas" 
+      required
+    />
+    <button type="submit" style="display:none;">Buscar</button>
+  </form>
+</div>
+
+
+  <main>
+    <div style="text-align: center;">
+        <iframe width="860" height="515" src="https://www.youtube.com/embed/rUFaT1mYYDE?si=u0mFmP85ol6VHOcr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+
+    <div class="bottom-content">
+      <article class="main-article" aria-label="Notícia principal de esportes">
+        <img src="https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2024/04/saopaulo.jpeg?w=1200&h=900&crop=0" alt="Jogador de futebol em ação" loading="lazy" width="100%" height="250" target="_blank" />
+        <h1>CBF divulga calendário do Brasileirão 2025; veja datas</h1>
+        <p>Nesta terça-feira (12), a CBF divulgou o calendário do Campeonato Brasileiro de 2025. Com o Mundial de Clubes no meio do ano, a entidade máxima do futebol brasileiro tomou a decisão de alongar o campeonato nacional.
+</p>
+        <a href="https://www.cnnbrasil.com.br/esportes/futebol/cbf-divulga-calendario-do-brasileirao-2025-veja-datas/" target="_blank">Leia mais</a>
+      </article>
+
+      <aside class="sidebar" aria-label="Últimas notícias esportivas">
+        <h2>Últimas Notícias</h2>
+        <ul>
+          <li><a href="https://ge.globo.com/futebol/copa-do-brasil/noticia/2025/08/12/quartas-de-final-da-copa-do-brasil-2025-veja-os-confrontos.ghtml" target="_blank">Quartas da Copa do Brasil 2025: veja os confrontos e o chaveamento até a final</a></li>
+          <li><a href="https://ge.globo.com/futebol/selecao-brasileira/noticia/2025/08/12/carlo-ancelotti-vai-convocar-selecao-brasileira-no-dia-25-para-jogos-contra-chile-e-bolivia.ghtml" target="_blank">Carlo Ancelotti vai convocar seleção brasileira no dia 25 para jogos contra Chile e Bolívia</a></li>
+          <li><a href="https://esportes.r7.com/jogada-10/santos-faz-campanha-de-libertadores-apos-mundial-de-clubes-12082025/" target="_blank">Santos faz ‘campanha de Libertadores’ após Mundial de Clubes</a></li>
+          <li><a href="https://esportes.r7.com/lance/brasileiro-revela-estrategia-apos-ganhar-meio-milhao-com-titulo-do-chelsea-no-mundial-17072025/" target="_blank">Brasileiro revela estratégia após ganhar meio milhão com título do Chelsea no Mundial</a></li>
+          <li><a href="https://www.espn.com.br/nba/artigo/_/id/15521231/nba-noite-abertura-rodada-natal-divulga-classicos-da-temporada" target="_blank">Noite de abertura e Rodada de Natal: NBA divulga alguns dos clássicos da temporada</a></li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+  
+  <footer>
+        &copy; 2025 Café com Notícia - Desenvolvido por Brenda Campos
+  </footer>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Café com Notícia - Jornal Brasileiro</title>
+  <link rel="icon" type="image/png" href="assets/reporter.png" />
+<style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: url('https://images.pexels.com/photos/2047905/pexels-photo-2047905.jpeg') no-repeat center center fixed;
+  background-size: 120% auto;
+  color: #222;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #c00;
+  transition: color 0.3s ease;
+  outline-offset: 3px;
+}
+
+a:hover,
+a:focus-visible {
+  color: #900;
+  outline: 2px solid #900;
+  outline-offset: 3px;
+}
+
+header {
+  background: #cc0000;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: white;
+  user-select: none;
+}
+
+.logo-text {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    indigo,
+    violet
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+
+/* Menu padrão desktop */
+nav {
+  flex-grow: 1;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li a {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  transition: background-color 0.25s ease;
+  display: inline-block;
+}
+
+.menu li a:hover,
+.menu li a.active,
+.menu li a:focus-visible {
+  background-color: #990000;
+  text-decoration: none;
+  outline: 2px solid #900;
+  outline-offset: 3px;
+}
+
+/* Container do vídeo + últimas notícias lado a lado */
+.top-content {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+section.video {
+  flex: 2 1 600px;
+  max-width: 700px;
+}
+
+section.video h2 {
+  color: #c00;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.video div {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+}
+
+.video iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border: 0;
+}
+
+aside.sidebar {
+  flex: 1 1 280px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+  padding: 25px 30px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+aside.sidebar h2 {
+  color: #c00;
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+aside.sidebar ul {
+  list-style: none;
+}
+
+aside.sidebar li {
+  margin-bottom: 12px;
+}
+
+aside.sidebar li a {
+  font-weight: 600;
+  color: #222;
+}
+
+aside.sidebar li a:hover,
+aside.sidebar li a:focus-visible {
+  color: #c00;
+  outline: none;
+  text-decoration: underline;
+}
+
+/* Notícia principal embaixo, ocupando largura total */
+article.main-article {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+  overflow: hidden;
+  /* REMOVIDO max-width e width para o flex funcionar igual */
+  /* width: 80%; */
+  /* max-width: 800px; */
+  /* margin: 30px auto; */
+  /* display, padding e flex ajustados no container .bottom-content */
+}
+
+/* Conteúdo da notícia principal */
+article.main-article img {
+  width: 100%;
+  height: 250px;
+  object-position: center;
+  object-fit: contain;
+  margin: 30px 0;
+}
+
+.main-article-content {
+  padding: 60px 50px;
+}
+
+.main-article-content h1 {
+  font-size: 2rem;
+  margin-bottom: 60px;
+  color: #c00;
+}
+
+.main-article-content p {
+  font-size: 1.1rem;
+  margin-bottom: 60px;
+  color: #444;
+}
+
+.main-article-content a {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #c00;
+  border-bottom: 2px solid transparent;
+}
+
+.main-article-content a:hover,
+.main-article-content a:focus-visible {
+  border-color: #c00;
+  outline: none;
+  text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .top-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  aside.sidebar {
+    max-height: none;
+    width: 100%;
+    flex: none;
+    order: 2;
+    margin: 30px auto;
+  }
+
+  section.video {
+    max-width: 100%;
+    flex: none;
+    order: 1;
+  }
+
+  /* Também deixa o .bottom-content em coluna para telas pequenas */
+  .bottom-content {
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+  }
+
+  .main-article,
+  .sidebar {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 30px 0;
+    height: auto;
+  }
+}
+ footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+/* --- NOVO: Container para notícia principal + sidebar lado a lado --- */
+.bottom-content {
+  display: flex;
+  gap: 30px;
+  flex-wrap: nowrap; /* mantém os blocos lado a lado */
+  align-items: stretch; /* deixa os blocos com mesma altura */
+  justify-content: center; /* centraliza o conjunto horizontalmente */
+  width: 80%; /* largura total do conjunto, alinhada com o layout */
+  max-width: 800px; /* largura máxima do conjunto */
+  margin: 30px auto; /* centraliza horizontalmente e adiciona margem vertical */
+}
+
+/* Ajuste para os blocos dentro do .bottom-content */
+.main-article,
+.sidebar {
+  flex: 1 1 0; /* os dois blocos dividem igualmente o espaço */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+  padding: 25px 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* para que ambos tenham altura igual */
+  max-width: none; /* remove qualquer limite de largura para expandir */
+  margin: 0; /* elimina margens que possam desalinhar */
+}
+
+</style>
+</head>
+<body>
+<header>
+    <div class="logo" aria-label="Logo NewsBr">
+      <span class="logo-text">Café com Notícia</span>
+    </div>
+
+    <!-- Botão hamburguer para mobile -->
+    <button class="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Menu desktop -->
+    <nav class="desktop-menu" role="navigation" aria-label="Menu principal">
+      <ul class="menu" role="menubar">
+        <li role="none"><a href="index.html" class="active" role="menuitem" tabindex="0" style="color: white;">Início</a></li>
+        <li role="none"><a href="brasil.html" role="menuitem" tabindex="-1" style="color: blue;">Brasil</a></li>
+        <li role="none"><a href="mundo.html" role="menuitem" tabindex="-1" style="color: purple;">Mundo</a></li>
+        <li role="none"><a href="economia.html" role="menuitem" tabindex="-1" style="color: orange;">Economia</a></li>
+        <li role="none"><a href="tecnologia.html" role="menuitem" tabindex="-1" style="color: gray;">Tecnologia</a></li>
+        <li role="none"><a href="esportes.html" role="menuitem" tabindex="-1" style="color: green;">Esportes</a></li>
+      </ul>
+  </header>
+
+<main style="max-width:1100px; margin:40px auto 60px; padding:0 20px; display:flex; flex-direction:column; gap:40px;">
+
+  <div class="top-content" style="width:100%; border-radius:8px; box-shadow:0 4px 14px rgb(0 0 0 / 0.1); overflow:hidden; position:relative; padding-bottom:56.25%; height:0;">
+    <iframe src="https://www.youtube.com/embed/KwFrvsnxPW0?si=G6n39b6qvabDFGug" 
+      title="YouTube video player" allowfullscreen 
+      referrerpolicy="strict-origin-when-cross-origin"
+      style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"></iframe>
+  </div>
+
+  <div class="bottom-content" style="display:flex; gap:30px; flex-wrap:wrap;">
+
+  <article class="main-article" tabindex="0" aria-label="Notícia principal"
+    style="flex:1 1 0; /* igual largura */
+           background:white;
+           border-radius:8px;
+           box-shadow:0 4px 14px rgb(0 0 0 / 0.1);
+           padding:25px 30px;
+           min-height:400px; /* mesma altura mínima */
+           overflow-y:auto;">
+    <img id="mainImage" src="https://via.placeholder.com/800x350?text=Carregando+imagem..."
+      alt="Imagem principal da notícia"
+      style="width:100%; height:200px; object-fit:cover;" />
+
+    <div class="main-article-content" style="padding:30px 25px; flex:1; display:flex; flex-direction:column;">
+      <h1 id="mainTitle" style="font-size:2rem; margin-bottom:10px; color:#c00;">Carregando notícia principal...</h1>
+      <p id="mainDescription" style="font-size:1.1rem; margin-bottom:15px; color:#444; flex-grow:1;"></p>
+      <a id="mainLink" href="#" aria-label="Leia mais sobre a notícia principal" target="_blank" rel="noopener noreferrer"
+        style="font-weight:700; font-size:1rem; color:#c00; border-bottom:2px solid transparent; text-decoration:none;">Leia mais</a>
+    </div>
+  </article>
+
+  <aside class="sidebar" aria-label="Últimas notícias"
+    style="flex:1 1 0; /* igual largura */
+           background:white;
+           border-radius:8px;
+           box-shadow:0 4px 14px rgb(0 0 0 / 0.1);
+           padding:25px 30px;
+           min-height:400px; /* mesma altura mínima */
+           overflow-y:auto;">
+    <h2 style="color:#c00; margin-bottom:15px; font-weight:700; font-size:1.4rem;">Últimas Notícias</h2>
+    <ul id="latestNewsList" style="list-style:none; padding-left:0;"></ul>
+</aside>
+
+  </div>
+  
+</main>
+
+
+<script>
+  // Função extrair imagem da descrição
+  function extractImageFromDescription(description) {
+    const div = document.createElement("div");
+    div.innerHTML = description;
+    const imgTag = div.querySelector("img");
+    if (imgTag && imgTag.src) return imgTag.src;
+    const regexImgUrl = /(https?:\/\/[^'" >]+?\.(jpg|jpeg|png|gif|webp))/i;
+    const match = description.match(regexImgUrl);
+    if (match) return match[1];
+    return "https://via.placeholder.com/400x180?text=Sem+imagem";
+  }
+
+  const rssFeeds = [
+    "https://www.tecmundo.com.br/rss.xml",
+    "https://g1.globo.com/tecnologia/rss.xml",
+    "https://rss.noticias.uol.com.br/tecnologia.xml",
+    "https://olhardigital.com.br/feed/",
+    "https://canaltech.com.br/rss/",
+  ];
+
+  async function fetchAndDisplayNews() {
+    const allItems = [];
+    for (const feedUrl of rssFeeds) {
+      try {
+        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`);
+        const data = await response.json();
+        if (data.status === "ok") {
+          allItems.push(...data.items);
+        } else {
+          console.error(`Erro ao carregar o feed: ${feedUrl}`, data.message);
+        }
+      } catch (error) {
+        console.error(`Erro ao buscar o feed: ${feedUrl}`, error);
+      }
+    }
+    allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+    if (allItems.length > 0) {
+      const mainNews = allItems[0];
+      document.getElementById("mainTitle").textContent = mainNews.title;
+      document.getElementById("mainDescription").textContent = mainNews.description.replace(/<[^>]+>/g, '').slice(0, 200) + '...';
+      document.getElementById("mainLink").href = mainNews.link;
+      document.getElementById("mainImage").src = extractImageFromDescription(mainNews.description);
+      document.getElementById("mainImage").alt = mainNews.title;
+    }
+
+    const latestNewsList = document.getElementById("latestNewsList");
+    latestNewsList.innerHTML = "";
+    for (let i = 1; i < Math.min(6, allItems.length); i++) {
+      const item = allItems[i];
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = item.link;
+      a.textContent = item.title;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      li.appendChild(a);
+      latestNewsList.appendChild(li);
+    }
+  }
+
+  fetchAndDisplayNews();
+</script>
+<footer>
+        &copy; 2025 Café com Notícia - Desenvolvido por Brenda Campos
+  </footer>
+</body>
+</html>
